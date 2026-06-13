@@ -15,6 +15,7 @@ function Sidebar({
         <optgroup label="Graphs">
           <option>BFS</option>
           <option>DFS</option>
+          <option>Topological Sort</option>
           <option>Dijkstra's</option>
           <option>Bellman-Ford</option>
         </optgroup>

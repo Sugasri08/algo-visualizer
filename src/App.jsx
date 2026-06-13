@@ -5,6 +5,9 @@ import Sidebar from "./components/panels/Sidebar"
 import ExplanationPanel from "./components/panels/ExplanationPanel"
 import { bfs } from "./algorithms/graphs/bfs"
 import { dfs } from "./algorithms/graphs/dfs"
+import { dijkstra } from "./algorithms/graphs/dijkstra"
+import { bellmanFord } from "./algorithms/graphs/bellmanFord"
+import { topologicalSort } from "./algorithms/graphs/topologicalSort"
 
 function App() {
   const [isDirected, setIsDirected] = useState(false)
@@ -25,18 +28,29 @@ function App() {
   }
 
   const runAlgorithm = () => {
-  if (!startNode) {
-    alert("Please click a node to select a start node first!")
-    return
+    if (!startNode) {
+      alert("Please click a node to select a start node first!")
+      return
+    }
+    if (selectedAlgorithm === "BFS") {
+      const result = bfs(nodes, edges, startNode)
+      applyFirstStep(result)
+    } else if (selectedAlgorithm === "DFS") {
+      const result = dfs(nodes, edges, startNode)
+      applyFirstStep(result)
+    } else if (selectedAlgorithm === "Dijkstra's") {
+      const result = dijkstra(nodes, edges, startNode)
+      applyFirstStep(result)
+    }
+    else if (selectedAlgorithm === "Bellman-Ford") {
+      const result = bellmanFord(nodes, edges, startNode)
+      applyFirstStep(result)
+    }
+    else if (selectedAlgorithm === "Topological Sort") {
+      const result = topologicalSort(nodes, edges, startNode)
+      applyFirstStep(result)
+    }
   }
-  if (selectedAlgorithm === "BFS") {
-    const result = bfs(nodes, edges, startNode)
-    applyFirstStep(result)
-  } else if (selectedAlgorithm === "DFS") {
-    const result = dfs(nodes, edges, startNode)
-    applyFirstStep(result)
-  }
-}
 
 const applyFirstStep = (result) => {
   setSteps(result)
