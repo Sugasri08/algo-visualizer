@@ -8,6 +8,7 @@ import { dfs } from "./algorithms/graphs/dfs"
 import { dijkstra } from "./algorithms/graphs/dijkstra"
 import { bellmanFord } from "./algorithms/graphs/bellmanFord"
 import { topologicalSort } from "./algorithms/graphs/topologicalSort"
+import { floydWarshall } from "./algorithms/graphs/floydWarshall"
 
 function App() {
   const [isDirected, setIsDirected] = useState(false)
@@ -28,10 +29,14 @@ function App() {
   }
 
   const runAlgorithm = () => {
-    if (!startNode) {
+    // Floyd-Warshall doesn't need a start node
+    const needsStartNode = selectedAlgorithm !== "Floyd-Warshall"
+
+    if (needsStartNode && !startNode) {
       alert("Please click a node to select a start node first!")
       return
     }
+
     if (selectedAlgorithm === "BFS") {
       const result = bfs(nodes, edges, startNode)
       applyFirstStep(result)
@@ -41,33 +46,35 @@ function App() {
     } else if (selectedAlgorithm === "Dijkstra's") {
       const result = dijkstra(nodes, edges, startNode)
       applyFirstStep(result)
-    }
-    else if (selectedAlgorithm === "Bellman-Ford") {
+    } else if (selectedAlgorithm === "Bellman-Ford") {
       const result = bellmanFord(nodes, edges, startNode)
       applyFirstStep(result)
-    }
-    else if (selectedAlgorithm === "Topological Sort") {
+    } else if (selectedAlgorithm === "Topological Sort") {
       const result = topologicalSort(nodes, edges, startNode)
+      applyFirstStep(result)
+    } else if (selectedAlgorithm === "Floyd-Warshall") {
+      // Floyd-Warshall computes ALL-PAIRS shortest paths — no start node needed
+      const result = floydWarshall(nodes, edges)
       applyFirstStep(result)
     }
   }
 
-const applyFirstStep = (result) => {
-  setSteps(result)
-  setCurrentStep(0)
-  if (result.length > 0) {
-    const step = result[0]
-    setNodes((nds) =>
-      nds.map((node) => ({
-        ...node,
-        data: {
-          ...node.data,
-          color: node.id === step.currentNode ? "#f5a623" : "#e94560",
-        },
-      }))
-    )
+  const applyFirstStep = (result) => {
+    setSteps(result)
+    setCurrentStep(0)
+    if (result.length > 0) {
+      const step = result[0]
+      setNodes((nds) =>
+        nds.map((node) => ({
+          ...node,
+          data: {
+            ...node.data,
+            color: node.id === step.currentNode ? "#f5a623" : "#e94560",
+          },
+        }))
+      )
+    }
   }
-}
 
   const applyStep = (stepIndex) => {
     if (steps.length === 0) return

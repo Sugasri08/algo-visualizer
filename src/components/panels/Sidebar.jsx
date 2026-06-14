@@ -3,6 +3,8 @@ function Sidebar({
   isDirected, setIsDirected,
   startNode, runAlgorithm, clearGraph
 }) {
+  const noStartNeeded = selectedAlgorithm === "Floyd-Warshall"
+
   return (
     <div style={styles.sidebar}>
       <h2 style={styles.logo}>AlgoViz</h2>
@@ -18,10 +20,15 @@ function Sidebar({
           <option>Topological Sort</option>
           <option>Dijkstra's</option>
           <option>Bellman-Ford</option>
+          <option>Floyd-Warshall</option>
         </optgroup>
       </select>
       <p style={{ color: "#aaa", fontSize: "11px" }}>
-        {startNode ? `Start node: ${startNode}` : "Click a node to select start"}
+        {noStartNeeded
+          ? "No start node needed"
+          : startNode
+          ? `Start node: ${startNode}`
+          : "Click a node to select start"}
       </p>
       <p style={styles.label}>Graph Type</p>
       <div style={styles.toggleContainer}>

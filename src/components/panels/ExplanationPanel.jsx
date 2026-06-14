@@ -1,6 +1,7 @@
 import { useState, useRef } from "react"
 import DataStructureVisualizer from "./DataStructureVisualizer"
 import DijkstraTable from "./DijkstraTable"
+import FloydWarshallMatrix from "./FloydWarshallMatrix"
 
 function ExplanationPanel({ steps, currentStep, applyStep }) {
   const step = steps.length > 0 ? steps[currentStep] : null
@@ -69,8 +70,13 @@ function ExplanationPanel({ steps, currentStep, applyStep }) {
         {step?.stack !== undefined && (
           <DataStructureVisualizer items={step.stack} type="stack" currentIndex={step.stack.length - 1} />
         )}
-        {step?.distances !== undefined && (
+        {/* Dijkstra's table — only when distances present but NOT a Floyd-Warshall step */}
+        {step?.distances !== undefined && step?.distMatrix === undefined && (
           <DijkstraTable step={step} />
+        )}
+        {/* Floyd-Warshall matrix */}
+        {step?.distMatrix !== undefined && (
+          <FloydWarshallMatrix step={step} />
         )}
       </div>
     </div>
